@@ -34,6 +34,10 @@ public class Receiver {
             wholeStr += str;
         }
 
+        if("bad".equals(wholeStr)){
+            response.setStatus(400);
+        }
+
         System.out.println(wholeStr);
 
     }
