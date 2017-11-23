@@ -72,6 +72,7 @@ public class MessageWriter {
     }
 
     public static void init(String streamName, String regionName) throws Exception {
+
         Region region = RegionUtils.getRegion(regionName);
         if (region == null) {
             System.err.println(regionName + " is not a valid AWS region.");

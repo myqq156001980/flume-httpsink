@@ -1,5 +1,5 @@
-package abel;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Controller;
@@ -18,8 +18,23 @@ import java.io.IOException;
 @Controller
 @EnableAutoConfiguration
 public class Receiver {
+    private static final Log LOG = LogFactory.getLog(Receiver.class);
+
+    private static void checkUsage(String[] args) {
+        if (args.length != 2) {
+            System.err.println("Usage: " + Receiver.class.getSimpleName()
+                    + " <stream name> <region>");
+            System.exit(1);
+        }
+    }
+
 
     public static void main(String[] args) throws Exception {
+        checkUsage(args);
+
+        String streamName = args[0];
+        String regionName = args[1];
+        MessageWriter.init(streamName, regionName);
         SpringApplication.run(Receiver.class, args);
     }
 
@@ -34,11 +49,8 @@ public class Receiver {
             wholeStr += str;
         }
 
-        if("bad".equals(wholeStr)){
-            response.setStatus(400);
-        }
-
-        System.out.println(wholeStr);
+        MessageWriter.sendMessage(wholeStr);
+        LOG.info("receive message :" + wholeStr);
 
     }
 }
